@@ -1,6 +1,8 @@
 package MyPackage;
 
 
+import java.util.Arrays;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -8,10 +10,16 @@ public class Main {
 
         for (int i = 0; i < 8; i++) {
             triplet.addLast(i);
-            triplet.addFirst(i);
+            triplet.printAll();
         }
 
-        triplet.printAll();
+        System.out.println("\n");
+
+        for (int i = 0; i < 8; i++) {
+            triplet.addFirst(i);
+            triplet.printAll();
+        }
+
     }
 
 }

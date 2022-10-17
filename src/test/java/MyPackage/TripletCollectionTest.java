@@ -9,7 +9,89 @@ import java.util.*;
 class TripletCollectionTest {
 
     int numberOfElements = 8; // >1
-    int tripletSize = 5; // >0
+    int tripletSize = 10; // >0
+
+    /*----------------Основные тесты---------------*/
+    @Test
+    void addFirst1() {
+        TripletCollection<Integer> myTriplet = new TripletCollection<>();
+        myTriplet.addFirst(1);
+        Assertions.assertEquals(1, myTriplet.getFirst());
+    }
+
+    @Test
+    void addFirst2() {
+        TripletCollection<Integer> myTriplet = new TripletCollection<>();
+        for (int i = 0; i < 6; i++) {
+            myTriplet.addFirst(i);
+        }
+        Assertions.assertEquals(5, myTriplet.getFirst());
+    }
+
+    @Test
+    void addFirst3() {
+        TripletCollection<Integer> myTriplet = new TripletCollection<>();
+        for (int i = 0; i < 26; i++) {
+            myTriplet.addFirst(i);
+        }
+        Assertions.assertEquals(25, myTriplet.getFirst());
+    }
+
+    @Test
+    void addFirst4() {
+        TripletCollection<Integer> myTriplet = new TripletCollection<>();
+        Assertions.assertThrows(IllegalStateException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                for (int i = 0; i < 1001; i++) {
+                    myTriplet.addFirst(i);
+                }
+            }
+        });
+    }
+
+    @Test
+    void addLast1() {
+        TripletCollection<Integer> myTriplet = new TripletCollection<>();
+        myTriplet.addLast(1);
+        Assertions.assertEquals(1, myTriplet.getLast());
+    }
+
+    @Test
+    void addLast2() {
+        TripletCollection<Integer> myTriplet = new TripletCollection<>();
+        for (int i = 0; i < 6; i++) {
+            myTriplet.addLast(i);
+        }
+        Assertions.assertEquals(5, myTriplet.getLast());
+    }
+
+    @Test
+    void addLast3() {
+        TripletCollection<Integer> myTriplet = new TripletCollection<>();
+        for (int i = 0; i < 26; i++) {
+            myTriplet.addLast(i);
+        }
+        Assertions.assertEquals(25, myTriplet.getLast());
+    }
+
+    @Test
+    void addLast4() {
+        TripletCollection<Integer> myTriplet = new TripletCollection<>();
+        Assertions.assertThrows(IllegalStateException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                for (int i = 0; i < 1100; i++) {
+                    myTriplet.addLast(i);
+                }
+            }
+        });
+    }
+
+
+
+
+    /*----------------Дополнительные тесты---------------*/
 
     @Test
     void initTest() {
@@ -26,6 +108,28 @@ class TripletCollectionTest {
 
         TripletCollection<Integer> myTriplet3 = new TripletCollection<>(tripletSize, col);
         Assertions.assertEquals(tripletSize, myTriplet3.getTripletSize());
+
+        TripletCollection<Integer> myTriplet4 = new TripletCollection<>(tripletSize, col, numberOfElements);
+        Assertions.assertEquals(numberOfElements, myTriplet4.getQueueVolume());
+
+        Assertions.assertThrows(IllegalStateException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                myTriplet4.addLast(1);
+            }
+        });
+
+        TripletCollection<Integer> myTriplet5 = new TripletCollection<>(tripletSize, numberOfElements);
+        Assertions.assertEquals(numberOfElements, myTriplet5.getQueueVolume());
+        Assertions.assertThrows(IllegalStateException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                for (int i = 0; i < numberOfElements + 1; i++) {
+                    myTriplet5.addFirst(i);
+                }
+            }
+        });
+
     }
 
     @Test

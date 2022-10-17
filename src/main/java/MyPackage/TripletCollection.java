@@ -10,6 +10,8 @@ public class TripletCollection<T> implements Deque<T> {
 
     private Node<T> lastTriplet;
 
+    private int queueVolume = 1000;
+
     public TripletCollection() {
         this (5);
     }
@@ -28,8 +30,18 @@ public class TripletCollection<T> implements Deque<T> {
         addAll(c);
     }
 
+    public TripletCollection (int tripletSize, Collection<? extends T> c, int queueVolume) {
+        this(tripletSize, queueVolume);
+        addAll(c);
+    }
+
+    public TripletCollection (int tripletSize, int queueVolume) {
+        this(tripletSize);
+        this.queueVolume = queueVolume;
+    }
+
     private static class Node<T> {
-        private Object [] data= new Object[tripletSize];
+        private Object[] data= new Object[tripletSize];
         private Node<T> nextTriplet;
         private Node<T> prevTriplet;
         private int index;
@@ -116,10 +128,17 @@ public class TripletCollection<T> implements Deque<T> {
         return tripletSize;
     }
 
+    public int getQueueVolume() {
+        return queueVolume;
+    }
+
     @Override
     public void addFirst(T t) {
         if (t == null)
             throw new NullPointerException("Nothing to add");
+
+        if (size()+1>queueVolume)
+            throw new IllegalStateException("Queue size exceeded");
 
         if (firstTriplet != null){
             if (firstTriplet.data[0] != null) {
@@ -142,6 +161,9 @@ public class TripletCollection<T> implements Deque<T> {
     public void addLast(T t) {
         if (t == null)
             throw new NullPointerException("Nothing to add");
+
+        if (size()+1>queueVolume)
+            throw new IllegalStateException("Queue size exceeded");
 
         if (lastTriplet.data[tripletSize - 1] != null) {
             newLastTriplet();
@@ -297,8 +319,7 @@ public class TripletCollection<T> implements Deque<T> {
 
     @Override
     public boolean offer(T t) {
-        offerLast(t);
-        return true;
+        return offerLast(t);
     }
 
     @Override
@@ -323,6 +344,9 @@ public class TripletCollection<T> implements Deque<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
+        if (c.size() + size() > queueVolume)
+            throw new IllegalStateException("Queue size exceeded");
+
         int idx = lastTriplet.index;
         c.forEach(this::addLast);
         return c.size() > tripletSize - idx;
@@ -397,6 +421,7 @@ public class TripletCollection<T> implements Deque<T> {
     public boolean contains(Object o) {
         if (o == null)
             throw new NullPointerException("No element");
+
         Iterator<T> iter = iterator();
         while (iter.hasNext()) {
             if (o.equals(iter.next())) {

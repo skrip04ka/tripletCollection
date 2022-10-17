@@ -7,10 +7,8 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
 
-        TripletCollection<Integer> triplet = new TripletCollection<>(5,null);
-        triplet.printAll();
+        TripletCollection<Integer> triplet = new TripletCollection<>();
 
-        System.out.println(triplet.getLast());
     }
 
 }

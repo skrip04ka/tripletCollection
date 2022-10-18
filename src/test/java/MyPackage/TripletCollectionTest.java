@@ -8,8 +8,6 @@ import java.util.*;
 
 class TripletCollectionTest {
 
-    int numberOfElements = 8; // >1
-    int tripletSize = 10; // >0
 
     /*----------------Основные тесты---------------*/
     @Test
@@ -92,6 +90,10 @@ class TripletCollectionTest {
 
 
     /*----------------Дополнительные тесты---------------*/
+
+
+    int numberOfElements = 8; // >1
+    int tripletSize = 10; // >0
 
     @Test
     void initTest() {

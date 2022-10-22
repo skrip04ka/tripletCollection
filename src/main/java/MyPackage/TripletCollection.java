@@ -4,7 +4,7 @@ import java.util.*;
 
 public class TripletCollection<T> implements Deque<T> {
 
-    private static int tripletSize;
+    private int tripletSize = 5;
 
     private Node<T> firstTriplet;
 
@@ -17,7 +17,7 @@ public class TripletCollection<T> implements Deque<T> {
     }
 
     public TripletCollection(int tripletSize) {
-        TripletCollection.tripletSize = tripletSize;
+        this.tripletSize = tripletSize;
         lastTriplet = new Node<>(null, null);
     }
 
@@ -40,8 +40,8 @@ public class TripletCollection<T> implements Deque<T> {
         this.queueVolume = queueVolume;
     }
 
-    private static class Node<T> {
-        private Object[] data= new Object[tripletSize];
+    private class Node<T> {
+        private final Object[] data;
         private Node<T> nextTriplet;
         private Node<T> prevTriplet;
         private int index;
@@ -49,6 +49,7 @@ public class TripletCollection<T> implements Deque<T> {
         Node(Node<T> prevTriplet, Node<T> nextTriplet) {
             this.prevTriplet = prevTriplet;
             this.nextTriplet = nextTriplet;
+            this.data = new Object[tripletSize];
         }
     }
 
@@ -62,7 +63,7 @@ public class TripletCollection<T> implements Deque<T> {
             firstTriplet.index = -1;
 
         } else {
-            TripletCollection.Node<T> newNode = new Node<>(lastTriplet, null);
+            Node<T> newNode = new Node<>(lastTriplet, null);
             lastTriplet.nextTriplet = newNode;
             lastTriplet = newNode;
             lastTriplet.index = 0;
@@ -75,7 +76,7 @@ public class TripletCollection<T> implements Deque<T> {
             firstTriplet = new Node<>(null, lastTriplet);
             lastTriplet.prevTriplet = firstTriplet;
         } else {
-            TripletCollection.Node<T> newNode = new Node<>(null, firstTriplet);
+            Node<T> newNode = new Node<>(null, firstTriplet);
             firstTriplet.prevTriplet = newNode;
             firstTriplet = newNode;
         }
@@ -187,18 +188,18 @@ public class TripletCollection<T> implements Deque<T> {
 
     @Override
     public T removeFirst() {
-        Object t = pollFirst();
+        T t = pollFirst();
         if (t == null)
             throw new NoSuchElementException("No element");
-        return (T) t;
+        return t;
     }
 
     @Override
     public T removeLast() {
-        Object t = pollLast();
+        T t = pollLast();
         if (t == null)
             throw new NoSuchElementException("No element");
-        return (T) t;
+        return t;
     }
 
     @Override
@@ -243,18 +244,18 @@ public class TripletCollection<T> implements Deque<T> {
 
     @Override
     public T getFirst() {
-        Object t = peekFirst();
+        T t = peekFirst();
         if (t == null)
             throw new NoSuchElementException("No element");
-        return (T) t;
+        return t;
     }
 
     @Override
     public T getLast() {
-        Object t = peekLast();
+        T t = peekLast();
         if (t == null)
             throw new NoSuchElementException("No element");
-        return (T) t;
+        return t;
     }
 
     @Override
@@ -367,7 +368,7 @@ public class TripletCollection<T> implements Deque<T> {
     public boolean retainAll(Collection<?> c) {
         boolean isRemove = false;
         boolean isNotEquals;
-        Object element;
+        T element;
 
         Iterator<T> iter = iterator();
         while (iter.hasNext()) {
@@ -422,9 +423,8 @@ public class TripletCollection<T> implements Deque<T> {
         if (o == null)
             throw new NullPointerException("No element");
 
-        Iterator<T> iter = iterator();
-        while (iter.hasNext()) {
-            if (o.equals(iter.next())) {
+        for (T t : this) {
+            if (o.equals(t)) {
                 return true;
             }
         }
@@ -561,17 +561,17 @@ public class TripletCollection<T> implements Deque<T> {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public <T> T[] toArray(T[] t) {
         int size = size();
         Object[] tripletArray = toArray();
-        if (size <= a.length) {
-            System.arraycopy(tripletArray, 0, a, 0, size);
-            if (size != a.length) {
-                a[size] = null;
+        if (size <= t.length) {
+            System.arraycopy(tripletArray, 0, t, 0, size);
+            if (size != t.length) {
+                t[size] = null;
             }
-            return a;
+            return t;
         } else {
-            return (T[]) Arrays.copyOfRange(tripletArray, 0, size, a.getClass());
+            return (T[]) Arrays.copyOfRange(tripletArray, 0, size, t.getClass());
         }
     }
 
